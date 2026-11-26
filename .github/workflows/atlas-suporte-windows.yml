@@ -42,10 +42,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant:
-          - { mode: client, name: "Cliente 1-via", exe: "AtlasSuporte", artifact: "AtlasSuporte-windows-x64" }
-          - { mode: full,   name: "Pro 2-vias",    exe: "AtlasDeskPro", artifact: "AtlasDeskPro-windows-x64" }
-    if: ${{ inputs.variant == 'both' || inputs.variant == matrix.variant.mode }}
+        variant: ${{ fromJSON(inputs.variant == 'client' && '[{"mode":"client","name":"Cliente 1-via","exe":"AtlasSuporte","artifact":"AtlasSuporte-windows-x64"}]' || inputs.variant == 'full' && '[{"mode":"full","name":"Pro 2-vias","exe":"AtlasDeskPro","artifact":"AtlasDeskPro-windows-x64"}]' || '[{"mode":"client","name":"Cliente 1-via","exe":"AtlasSuporte","artifact":"AtlasSuporte-windows-x64"},{"mode":"full","name":"Pro 2-vias","exe":"AtlasDeskPro","artifact":"AtlasDeskPro-windows-x64"}]') }}
     steps:
       - name: Export GitHub Actions cache environment variables
         uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
