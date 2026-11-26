@@ -230,7 +230,10 @@ fn is_windows_7() -> bool {
 }
 
 fn execute(path: PathBuf, args: Vec<String>, _ui: bool) {
-    println!("executing {}", path.display());
+    let is_get_id = args.first().map(String::as_str) == Some("--get-id");
+    if !is_get_id {
+        println!("executing {}", path.display());
+    }
     // setup env
     let exe = std::env::current_exe().unwrap_or_default();
     let exe_name = exe.file_name().unwrap_or_default();
@@ -247,7 +250,7 @@ fn execute(path: PathBuf, args: Vec<String>, _ui: bool) {
     }
 
     cmd.env(APPNAME_RUNTIME_ENV_KEY, exe_name);
-    if use_null_stdio() {
+    if !is_get_id && use_null_stdio() {
         cmd.stdin(Stdio::null())
             .stdout(Stdio::null())
             .stderr(Stdio::null());
@@ -257,6 +260,13 @@ fn execute(path: PathBuf, args: Vec<String>, _ui: bool) {
             .stderr(Stdio::inherit());
     }
     let _child = cmd.spawn();
+
+    if is_get_id {
+        if let Ok(mut child) = _child {
+            let _ = child.wait();
+        }
+        return;
+    }
 
     #[cfg(windows)]
     if _ui {

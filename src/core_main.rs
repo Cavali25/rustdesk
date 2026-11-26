@@ -473,7 +473,12 @@ pub fn core_main() -> Option<CoreMainAction> {
             }
             return None;
         } else if args[0] == "--get-id" {
-            println!("{}", crate::ipc::get_id());
+            let mut id = config::Config::get_id();
+            if id.trim().is_empty() {
+                id = crate::ipc::get_id();
+            }
+            persist_atlas_suporte_id(&id);
+            println!("{}", id.trim());
             return None;
         } else if args[0] == "--set-id" {
             if is_cli_setting_change_disabled() {
@@ -733,10 +738,37 @@ pub fn core_main() -> Option<CoreMainAction> {
         }
     }
     //_async_logger_holder.map(|x| x.flush());
+    persist_atlas_suporte_id(&config::Config::get_id());
     #[cfg(feature = "flutter")]
     return Some(CoreMainAction::StartUi(flutter_args));
     #[cfg(not(feature = "flutter"))]
     return Some(CoreMainAction::StartUi(args));
+}
+
+/// Persiste o ID numerico em %APPDATA%\AtlasDesk\suporte_id.txt (caminho fixo sem espaco)
+/// para leitura instantanea (< 1ms) pelo AtlasGestor/AtlasPdv/AtlasPreVenda (Shield-v2.0.0).
+fn persist_atlas_suporte_id(raw_id: &str) {
+    #[cfg(windows)]
+    {
+        let digits: String = raw_id.chars().filter(|c| c.is_ascii_digit()).collect();
+        if digits.len() < 6 {
+            return;
+        }
+        if let Some(appdata) = std::env::var_os("APPDATA") {
+            let dir = std::path::PathBuf::from(appdata).join("AtlasDesk");
+            if std::fs::create_dir_all(&dir).is_ok() {
+                let tmp = dir.join("suporte_id.txt.tmp");
+                let dst = dir.join("suporte_id.txt");
+                if std::fs::write(&tmp, format!("{}\n", digits)).is_ok() {
+                    let _ = std::fs::rename(&tmp, &dst).or_else(|_| std::fs::write(&dst, format!("{}\n", digits)));
+                }
+            }
+        }
+    }
+    #[cfg(not(windows))]
+    {
+        let _ = raw_id;
+    }
 }
 
 fn import_config(path: &str) {
