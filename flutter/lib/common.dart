@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hbb/atlas/atlas_theme.dart';
 import 'package:flutter_hbb/common/formatter/id_formatter.dart';
 import 'package:flutter_hbb/desktop/widgets/refresh_wrapper.dart';
 import 'package:flutter_hbb/desktop/widgets/tabbar_widget.dart';
@@ -248,18 +249,18 @@ class ColorThemeExtension extends ThemeExtension<ColorThemeExtension> {
 class MyTheme {
   MyTheme._();
 
-  static const Color grayBg = Color(0xFFEFEFF2);
-  static const Color accent = Color(0xFF0071FF);
-  static const Color accent50 = Color(0x770071FF);
-  static const Color accent80 = Color(0xAA0071FF);
-  static const Color canvasColor = Color(0xFF212121);
-  static const Color border = Color(0xFFCCCCCC);
-  static const Color idColor = Color(0xFF00B6F0);
-  static const Color darkGray = Color.fromARGB(255, 148, 148, 148);
-  static const Color cmIdColor = Color(0xFF21790B);
-  static const Color dark = Colors.black87;
-  static const Color button = Color(0xFF2C8CFF);
-  static const Color hoverBorder = Color(0xFF999999);
+  static const Color grayBg = AtlasTheme.lightBackground;
+  static const Color accent = AtlasTheme.lightAccent;
+  static const Color accent50 = AtlasTheme.lightAccent50;
+  static const Color accent80 = AtlasTheme.lightAccent80;
+  static const Color canvasColor = AtlasTheme.darkBackground;
+  static const Color border = AtlasTheme.lightBorder;
+  static const Color idColor = AtlasTheme.lightAccent;
+  static const Color darkGray = AtlasTheme.lightTextSecondary;
+  static const Color cmIdColor = AtlasTheme.lightOnline;
+  static const Color dark = AtlasTheme.lightTextPrimary;
+  static const Color button = AtlasTheme.lightAccent;
+  static const Color hoverBorder = AtlasTheme.lightGold;
 
   // ListTile
   static const ListTileThemeData listTileTheme = ListTileThemeData(
@@ -374,9 +375,11 @@ class MyTheme {
     useMaterial3: false,
     brightness: Brightness.light,
     hoverColor: Color.fromARGB(255, 224, 224, 224),
-    scaffoldBackgroundColor: Colors.white,
-    dialogBackgroundColor: Colors.white,
-    appBarTheme: AppBarTheme(
+    scaffoldBackgroundColor: AtlasTheme.lightBackground,
+    dialogBackgroundColor: AtlasTheme.lightSurface,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AtlasTheme.lightPrimary,
+      foregroundColor: Colors.white,
       shadowColor: Colors.transparent,
     ),
     dialogTheme: DialogTheme(
@@ -451,8 +454,12 @@ class MyTheme {
     menuBarTheme: MenuBarThemeData(
         style:
             MenuStyle(backgroundColor: MaterialStatePropertyAll(Colors.white))),
-    colorScheme: ColorScheme.light(
-        primary: Colors.blue, secondary: accent, background: grayBg),
+    colorScheme: const ColorScheme.light(
+        primary: AtlasTheme.lightPrimary,
+        secondary: AtlasTheme.lightAccent,
+        surface: AtlasTheme.lightSurface,
+        background: AtlasTheme.lightBackground,
+        error: AtlasTheme.lightError),
     popupMenuTheme: PopupMenuThemeData(
         color: Colors.white,
         shape: RoundedRectangleBorder(
@@ -472,9 +479,11 @@ class MyTheme {
     useMaterial3: false,
     brightness: Brightness.dark,
     hoverColor: Color.fromARGB(255, 45, 46, 53),
-    scaffoldBackgroundColor: Color(0xFF18191E),
-    dialogBackgroundColor: Color(0xFF18191E),
-    appBarTheme: AppBarTheme(
+    scaffoldBackgroundColor: AtlasTheme.darkBackground,
+    dialogBackgroundColor: AtlasTheme.darkSurface,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AtlasTheme.darkPrimary,
+      foregroundColor: AtlasTheme.darkTextPrimary,
       shadowColor: Colors.transparent,
     ),
     dialogTheme: DialogTheme(
@@ -559,10 +568,12 @@ class MyTheme {
     menuBarTheme: MenuBarThemeData(
         style: MenuStyle(
             backgroundColor: MaterialStatePropertyAll(Color(0xFF121212)))),
-    colorScheme: ColorScheme.dark(
-      primary: Colors.blue,
-      secondary: accent,
-      background: Color(0xFF24252B),
+    colorScheme: const ColorScheme.dark(
+      primary: AtlasTheme.darkGold,
+      secondary: AtlasTheme.darkAccent,
+      surface: AtlasTheme.darkSurface,
+      background: AtlasTheme.darkBackground,
+      error: AtlasTheme.darkError,
     ),
     popupMenuTheme: PopupMenuThemeData(
         shape: RoundedRectangleBorder(

@@ -864,13 +864,16 @@ def build_flutter_arch_manjaro(version, features):
 
 
 def build_flutter_windows(version, features, skip_portable_pack):
+    atlas_mode = os.environ.get('ATLAS_MODE', 'full').strip().lower()
+    if atlas_mode == 'client' and 'atlas-client' not in features.split(','):
+        features = f'{features},atlas-client' if features else 'atlas-client'
     if not skip_cargo:
         system2(f'cargo build --locked --features {features} --lib --release')
         if not os.path.exists("target/release/librustdesk.dll"):
             print("cargo build failed, please check rust source code.")
             exit(-1)
     os.chdir('flutter')
-    system2('flutter build windows --release')
+    system2(f'flutter build windows --release --dart-define=ATLAS_MODE={atlas_mode}')
     os.chdir('..')
     shutil.copy2('target/release/deps/dylib_virtual_display.dll',
                  flutter_build_dir_2)

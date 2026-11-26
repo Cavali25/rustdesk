@@ -198,7 +198,12 @@ fn resolve_lang(saved_lang: &str, locale: &str, cjk_fallback: bool) -> String {
 
 #[cfg(not(any(target_os = "android", target_os = "ios")))]
 pub fn translate(name: String) -> String {
-    let locale = sys_locale::get_locale().unwrap_or_default();
+    let saved = hbb_common::config::LocalConfig::get_option("lang");
+    let locale = if saved.is_empty() {
+        "pt-br".to_owned()
+    } else {
+        sys_locale::get_locale().unwrap_or_else(|_| "pt-br".to_owned())
+    };
     translate_locale(name, &locale)
 }
 
