@@ -186,18 +186,21 @@ jobs:
           name: topmostwindow-artifacts-x64
           path: "./rustdesk"
 
-      - name: Build self-extracted portable executable
+      - name: Build self-extracted portable and installer executables
         shell: bash
         run: |
           sed -i '/dpiAware/d' res/manifest.xml
+          mv ./rustdesk/rustdesk.exe ./rustdesk/AtlasDesk.exe
           pushd ./libs/portable
           pip3 install -r requirements.txt
-          python3 ./generate.py -f ../../rustdesk/ -o . -e ../../rustdesk/rustdesk.exe
+          python3 ./generate.py -f ../../rustdesk/ -o . -e ../../rustdesk/AtlasDesk.exe
           popd
           mkdir -p ./AtlasOutput
           OUT_NAME="${{ matrix.variant.exe }}"
           cp ./target/release/rustdesk-portable-packer.exe "./AtlasOutput/${OUT_NAME}.exe"
+          cp ./target/release/rustdesk-portable-packer.exe "./AtlasOutput/${OUT_NAME}-install.exe"
           sha256sum "./AtlasOutput/${OUT_NAME}.exe" > "./AtlasOutput/${OUT_NAME}.exe.sha256"
+          sha256sum "./AtlasOutput/${OUT_NAME}-install.exe" > "./AtlasOutput/${OUT_NAME}-install.exe.sha256"
           ls -lh "./AtlasOutput/"
 
       - name: Upload portable artifact
