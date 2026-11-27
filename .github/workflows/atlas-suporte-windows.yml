@@ -61,7 +61,7 @@ jobs:
         env:
           ATLAS_SERVER: ${{ secrets.ATLAS_RENDEZVOUS_SERVER }}
           ATLAS_KEY: ${{ secrets.ATLAS_RS_PUB_KEY }}
-          ATLAS_APP_NAME: "Atlas Desk"
+          ATLAS_APP_NAME: "AtlasDesk"
         run: |
           import os, pathlib, re, sys
 

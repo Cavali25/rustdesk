@@ -86,7 +86,7 @@ jobs:
           )
           new_text, n3 = re.subn(
               r'pub static ref APP_NAME:\s*RwLock<String>\s*=\s*RwLock::new\("RustDesk"\.to_owned\(\)\);',
-              'pub static ref APP_NAME: RwLock<String> = RwLock::new("Atlas Desk".to_owned());',
+              'pub static ref APP_NAME: RwLock<String> = RwLock::new("AtlasDesk".to_owned());',
               new_text,
               count=1,
           )
