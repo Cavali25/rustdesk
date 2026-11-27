@@ -202,7 +202,7 @@ pub fn translate(name: String) -> String {
     let locale = if saved.is_empty() {
         "pt-br".to_owned()
     } else {
-        sys_locale::get_locale().unwrap_or_else(|_| "pt-br".to_owned())
+        sys_locale::get_locale().unwrap_or_else(|| "pt-br".to_owned())
     };
     translate_locale(name, &locale)
 }
